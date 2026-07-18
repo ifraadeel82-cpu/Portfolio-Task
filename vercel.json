@@ -1,5 +1,9 @@
 {
-  "rewrites": [
-    { "source": "/", "destination": "/ifra_portfolio.html" }
+  "version": 2,
+  "builds": [
+    { "src": "ifra_portfolio.html", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "/", "dest": "/ifra_portfolio.html" }
   ]
 }
