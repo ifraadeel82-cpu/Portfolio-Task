@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Ifra Adeel – Software Developer</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F5F4F0;
+    --surface: #EEECEA;
+    --surface2: #E6E4DF;
+    --text: #1C1F26;
+    --text-muted: #6B7280;
+    --accent: #5C7A62;
+    --accent-light: #EBF1EC;
+    --border: rgba(0,0,0,0.08);
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 20px rgba(0,0,0,0.05);
+    --shadow-hover: 0 4px 8px rgba(0,0,0,0.08), 0 12px 32px rgba(0,0,0,0.1);
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 20px 16px 40px;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* Grain texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    background-size: 200px 200px;
+    z-index: 0;
+  }
+
+  .page { position: relative; z-index: 1; max-width: 1120px; margin: 0 auto; }
+
+  /* ── SCROLL FADE-IN ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 0.65s cubic-bezier(.22,1,.36,1), transform 0.65s cubic-bezier(.22,1,.36,1);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── HEADER ── */
+  header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 20px;
+    padding: 8px 0 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .header-left h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 5vw, 44px);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 8px;
+    animation: breathe 5s ease-in-out infinite;
+    display: inline-block;
+  }
+  @keyframes breathe {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-3px); }
+  }
+  .header-left p {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--text-muted);
+    max-width: 520px;
+  }
+  .contact-btn {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--text);
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    padding: 10px 20px;
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    letter-spacing: 0.01em;
+    transition: background 0.25s, transform 0.2s, box-shadow 0.2s;
+    white-space: nowrap;
+    margin-top: 4px;
+  }
+  .contact-btn:hover {
+    background: var(--accent);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(92,122,98,0.35);
+  }
+
+  /* ── GRID ── */
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px;
+  }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 580px) { .grid { grid-template-columns: 1fr; } }
+
+  /* ── CARD BASE ── */
+  .card {
+    background: var(--surface);
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.3s cubic-bezier(.22,1,.36,1), box-shadow 0.3s cubic-bezier(.22,1,.36,1), border-color 0.3s;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+    border-color: rgba(92,122,98,0.2);
+  }
+  .card-pad { padding: 20px 22px; }
+
+  /* ── BOTANICAL SVG WATERMARKS ── */
+  .botanical-watermark {
+    position: absolute;
+    pointer-events: none;
+    opacity: 0.07;
+  }
+  .botanical-watermark-light {
+    position: absolute;
+    pointer-events: none;
+    opacity: 0.12;
+  }
+
+  /* ── LABEL ── */
+  .label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+  }
+  .label-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+    animation: pulse-dot 3s ease-in-out infinite;
+  }
+  @keyframes pulse-dot {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(92,122,98,0.4); }
+    50% { box-shadow: 0 0 0 4px rgba(92,122,98,0); }
+  }
+
+  /* ── CARD 1: ABOUT ── */
+  .card-about {
+    grid-column: 1;
+    grid-row: 1 / 3;
+    background: var(--text);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 320px;
+  }
+  .card-about:hover { border-color: rgba(143,184,148,0.3); }
+  .card-about .label { color: rgba(255,255,255,0.45); }
+  .card-about .label-dot { background: #8FB894; }
+  .about-summary {
+    font-size: 13.5px;
+    line-height: 1.75;
+    color: rgba(255,255,255,0.72);
+    margin-bottom: 20px;
+  }
+  .about-summary strong { color: #fff; font-weight: 500; }
+  .timeline { margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 16px; }
+  .timeline-row {
+    display: grid;
+    grid-template-columns: 72px 1fr;
+    gap: 10px;
+    padding: 7px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    align-items: start;
+    transition: background 0.2s;
+  }
+  .timeline-row:hover { background: rgba(255,255,255,0.03); border-radius: 8px; }
+  .timeline-row:last-child { border-bottom: none; }
+  .timeline-year { font-size: 10px; color: rgba(255,255,255,0.35); letter-spacing: 0.04em; padding-top: 2px; }
+  .timeline-role { font-size: 12px; color: rgba(255,255,255,0.8); line-height: 1.4; }
+  .timeline-org { font-size: 11px; color: rgba(255,255,255,0.38); margin-top: 2px; }
+
+  /* ── CARD 2: STATS ── */
+  .card-stats {
+    background: var(--accent-light);
+    border-color: rgba(92,122,98,0.15);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 140px;
+  }
+  .stat-number {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(48px, 7vw, 72px);
+    line-height: 1;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+    transition: transform 0.3s;
+  }
+  .card-stats:hover .stat-number { transform: scale(1.06); }
+  .stat-label { font-size: 12px; color: var(--text-muted); margin-top: 6px; letter-spacing: 0.04em; }
+
+  /* ── CARD 3: QUOTE ── */
+  .card-quote { background: var(--surface2); }
+  .quote-text {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    margin-bottom: 14px;
+  }
+  .quote-attr { font-size: 12px; color: var(--text-muted); }
+  .quote-attr strong { color: var(--text); font-weight: 500; }
+
+  /* ── CARD 4: SKILLS ── */
+  .skills-grid { display: flex; flex-wrap: wrap; gap: 7px; }
+  .skill-tag {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-size: 11.5px;
+    color: var(--text);
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    transition: background 0.2s, border-color 0.2s, transform 0.2s, color 0.2s;
+    cursor: default;
+  }
+  .skill-tag:hover {
+    background: var(--accent-light);
+    border-color: rgba(92,122,98,0.3);
+    color: var(--accent);
+    transform: translateY(-2px);
+  }
+  .skill-tag.accent {
+    background: var(--accent-light);
+    border-color: rgba(92,122,98,0.2);
+    color: var(--accent);
+  }
+  .skill-tag.accent:hover {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+
+  /* ── CARD 5: PROJECTS ── */
+  .card-projects { grid-column: 2 / 4; }
+  @media (max-width: 900px) { .card-projects { grid-column: 1 / 3; } }
+  @media (max-width: 580px) { .card-projects { grid-column: 1; } }
+  .projects-list { display: flex; flex-direction: column; }
+  .project-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    align-items: start;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.2s;
+    border-radius: 8px;
+    margin: 0 -6px;
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+  .project-item:hover { background: rgba(92,122,98,0.04); }
+  .project-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .project-item:first-child { padding-top: 0; }
+  .project-name { font-size: 13.5px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+  .project-desc { font-size: 12px; color: var(--text-muted); line-height: 1.55; }
+  .project-stack { display: flex; flex-wrap: wrap; gap: 5px; justify-content: flex-end; }
+  .stack-tag {
+    background: var(--surface2);
+    border-radius: 6px;
+    padding: 3px 8px;
+    font-size: 10.5px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    transition: background 0.2s, color 0.2s;
+  }
+  .project-item:hover .stack-tag { background: var(--accent-light); color: var(--accent); }
+
+  /* ── CARD 6: CONTACT ── */
+  .card-contact {
+    background: var(--accent);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .card-contact:hover { border-color: rgba(255,255,255,0.2); }
+  .card-contact .label { color: rgba(255,255,255,0.55); }
+  .card-contact .label-dot { background: rgba(255,255,255,0.5); }
+  .contact-info { display: flex; flex-direction: column; gap: 10px; }
+  .contact-line {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12.5px;
+    color: rgba(255,255,255,0.85);
+    transition: color 0.2s;
+  }
+  .contact-line:hover { color: #fff; }
+  .contact-icon {
+    width: 30px; height: 30px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.2s;
+  }
+  .contact-line:hover .contact-icon { background: rgba(255,255,255,0.25); }
+  .contact-icon svg { width: 14px; height: 14px; stroke: #fff; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .contact-location { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 12px; }
+
+  /* ── CARD 7: ACHIEVEMENTS ── */
+  .achieve-list { display: flex; flex-direction: column; gap: 11px; }
+  .achieve-item { display: flex; gap: 10px; align-items: flex-start; }
+  .achieve-bullet {
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    margin-top: 5px;
+    flex-shrink: 0;
+  }
+  .achieve-text { font-size: 12.5px; line-height: 1.55; color: var(--text); }
+  .achieve-text span { color: var(--text-muted); font-size: 11.5px; display: block; margin-top: 2px; }
+
+  /* ── CARD 8: TOOLS MARQUEE ── */
+  .card-marquee {
+    grid-column: 1 / 4;
+    background: var(--surface2);
+    padding: 18px 0;
+    overflow: hidden;
+  }
+  @media (max-width: 900px) { .card-marquee { grid-column: 1 / 3; } }
+  @media (max-width: 580px) { .card-marquee { grid-column: 1; } }
+  .marquee-label { text-align: center; margin-bottom: 14px; }
+  .marquee-track {
+    display: flex;
+    gap: 10px;
+    width: max-content;
+    margin-bottom: 10px;
+  }
+  .marquee-track-left { animation: scroll-left 28s linear infinite; }
+  .marquee-track-right { animation: scroll-right 34s linear infinite; }
+  @keyframes scroll-left { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @keyframes scroll-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+  .marquee-wrap {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  }
+  .tool-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 14px;
+    font-size: 12px;
+    color: var(--text);
+    white-space: nowrap;
+    font-weight: 400;
+  }
+  .tool-pill svg { width: 14px; height: 14px; opacity: 0.6; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    margin-top: 28px;
+    font-size: 11.5px;
+    color: var(--text-muted);
+    letter-spacing: 0.03em;
+  }
+
+  @media (max-width: 580px) {
+    header { flex-direction: column; }
+    .contact-btn { align-self: flex-start; }
+    .card-about { grid-row: auto; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .card { transition: none; }
+    .card:hover { transform: none; }
+    header h1 { animation: none; }
+    .label-dot { animation: none; }
+    .marquee-track { animation: none; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- BOTANICAL BG ACCENT (subtle, fixed) -->
+  <svg style="position:fixed;top:-80px;right:-80px;width:420px;height:420px;pointer-events:none;opacity:0.04;z-index:0;" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M200 380 Q200 200 380 200" stroke="#5C7A62" stroke-width="1.5" fill="none"/>
+    <path d="M200 380 Q200 280 320 240" stroke="#5C7A62" stroke-width="1" fill="none"/>
+    <path d="M200 380 Q160 280 80 260" stroke="#5C7A62" stroke-width="1" fill="none"/>
+    <ellipse cx="310" cy="210" rx="28" ry="16" fill="#5C7A62" transform="rotate(-30 310 210)"/>
+    <ellipse cx="260" cy="185" rx="22" ry="13" fill="#5C7A62" transform="rotate(-50 260 185)"/>
+    <ellipse cx="340" cy="165" rx="20" ry="11" fill="#5C7A62" transform="rotate(-20 340 165)"/>
+    <ellipse cx="120" cy="250" rx="24" ry="14" fill="#5C7A62" transform="rotate(40 120 250)"/>
+    <ellipse cx="80" cy="210" rx="18" ry="10" fill="#5C7A62" transform="rotate(55 80 210)"/>
+    <circle cx="380" cy="200" r="4" fill="#5C7A62"/>
+    <circle cx="200" cy="380" r="4" fill="#5C7A62"/>
+  </svg>
+  <svg style="position:fixed;bottom:-60px;left:-60px;width:320px;height:320px;pointer-events:none;opacity:0.04;z-index:0;" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20 280 Q100 180 220 100" stroke="#5C7A62" stroke-width="1.5" fill="none"/>
+    <path d="M20 280 Q80 220 160 180" stroke="#5C7A62" stroke-width="1" fill="none"/>
+    <ellipse cx="90" cy="200" rx="24" ry="13" fill="#5C7A62" transform="rotate(-40 90 200)"/>
+    <ellipse cx="150" cy="155" rx="20" ry="11" fill="#5C7A62" transform="rotate(-60 150 155)"/>
+    <ellipse cx="200" cy="115" rx="18" ry="10" fill="#5C7A62" transform="rotate(-70 200 115)"/>
+  </svg>
+
+  <!-- HEADER -->
+  <header class="reveal">
+    <div class="header-left">
+      <h1>Hi, I'm Ifra Adeel.</h1>
+      <p>A Lahore-based Computer Science undergraduate building web applications, AI-driven systems, and data-intensive tools. Currently in my 6th semester at COMSATS University.</p>
+    </div>
+    <a href="mailto:ifraadeel82@gmail.com" class="contact-btn">
+      Get in Touch
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+    </a>
+  </header>
+
+  <!-- GRID -->
+  <div class="grid">
+
+    <!-- CARD 1: ABOUT + TIMELINE -->
+    <div class="card card-about card-pad reveal" style="transition-delay:0.05s">
+      <!-- botanical watermark inside dark card -->
+      <svg class="botanical-watermark-light" style="right:-10px;bottom:60px;width:160px;height:160px;" viewBox="0 0 160 160" fill="none">
+        <path d="M80 150 Q80 80 150 80" stroke="#8FB894" stroke-width="1.2" fill="none"/>
+        <ellipse cx="128" cy="72" rx="18" ry="10" fill="#8FB894" transform="rotate(-35 128 72)"/>
+        <ellipse cx="108" cy="58" rx="14" ry="8" fill="#8FB894" transform="rotate(-55 108 58)"/>
+        <ellipse cx="145" cy="52" rx="12" ry="7" fill="#8FB894" transform="rotate(-20 145 52)"/>
+        <circle cx="150" cy="80" r="3" fill="#8FB894"/>
+      </svg>
+      <div>
+        <div class="label"><span class="label-dot"></span> About</div>
+        <p class="about-summary">
+          CS undergrad with hands-on experience in <strong>Python, MERN stack, SQL</strong> and <strong>AI/ML fundamentals</strong>. Strong foundation in OOP, DSA, and DBMS. Interested in intelligent systems, backend engineering, and cybersecurity.
+        </p>
+      </div>
+      <div class="timeline">
+        <div class="label" style="margin-bottom:10px;"><span class="label-dot"></span> Background</div>
+        <div class="timeline-row">
+          <div class="timeline-year">2024–Now</div>
+          <div><div class="timeline-role">AI/ML Co-Lead</div><div class="timeline-org">Google Developer Groups, CUI Lahore</div></div>
+        </div>
+        <div class="timeline-row">
+          <div class="timeline-year">2024–Now</div>
+          <div><div class="timeline-role">Campus Ambassador</div><div class="timeline-org">FirstPassAI</div></div>
+        </div>
+        <div class="timeline-row">
+          <div class="timeline-year">2024–2028</div>
+          <div><div class="timeline-role">BS Computer Science</div><div class="timeline-org">COMSATS University, Lahore</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 2: STAT -->
+    <div class="card card-stats card-pad reveal" style="transition-delay:0.1s">
+      <svg class="botanical-watermark" style="right:0;bottom:0;width:100px;height:100px;" viewBox="0 0 100 100" fill="none">
+        <path d="M50 95 Q50 50 95 50" stroke="#5C7A62" stroke-width="1" fill="none"/>
+        <ellipse cx="80" cy="44" rx="14" ry="8" fill="#5C7A62" transform="rotate(-35 80 44)"/>
+        <ellipse cx="92" cy="28" rx="10" ry="6" fill="#5C7A62" transform="rotate(-20 92 28)"/>
+      </svg>
+      <div class="stat-number">4+</div>
+      <div class="stat-label">Projects Shipped</div>
+    </div>
+
+    <!-- CARD 3: RECOGNITION -->
+    <div class="card card-quote card-pad reveal" style="transition-delay:0.15s">
+      <svg class="botanical-watermark" style="right:-5px;top:-5px;width:110px;height:110px;" viewBox="0 0 110 110" fill="none">
+        <path d="M10 100 Q10 10 100 10" stroke="#5C7A62" stroke-width="1" fill="none"/>
+        <ellipse cx="70" cy="22" rx="16" ry="9" fill="#5C7A62" transform="rotate(-50 70 22)"/>
+        <ellipse cx="88" cy="14" rx="12" ry="7" fill="#5C7A62" transform="rotate(-30 88 14)"/>
+        <ellipse cx="52" cy="36" rx="13" ry="7" fill="#5C7A62" transform="rotate(-65 52 36)"/>
+      </svg>
+      <div class="label"><span class="label-dot"></span> Recognition</div>
+      <p class="quote-text">"Silver Tier participant in AI Seekho 2026 — a countrywide AI skills initiative supported by Google."</p>
+      <div class="quote-attr"><strong>Google · AI Seekho 2026</strong> — Structured labs &amp; swag rewards</div>
+    </div>
+
+    <!-- CARD 4: SKILLS -->
+    <div class="card card-pad reveal" style="transition-delay:0.2s">
+      <svg class="botanical-watermark" style="right:-8px;bottom:-8px;width:120px;height:120px;" viewBox="0 0 120 120" fill="none">
+        <path d="M60 115 Q60 60 115 60" stroke="#5C7A62" stroke-width="1" fill="none"/>
+        <ellipse cx="96" cy="52" rx="18" ry="10" fill="#5C7A62" transform="rotate(-35 96 52)"/>
+        <ellipse cx="110" cy="36" rx="13" ry="7" fill="#5C7A62" transform="rotate(-20 110 36)"/>
+        <ellipse cx="80" cy="38" rx="14" ry="8" fill="#5C7A62" transform="rotate(-55 80 38)"/>
+      </svg>
+      <div class="label"><span class="label-dot"></span> Skills</div>
+      <div class="skills-grid">
+        <span class="skill-tag accent">Python</span>
+        <span class="skill-tag accent">Node.js</span>
+        <span class="skill-tag accent">React.js</span>
+        <span class="skill-tag accent">Express.js</span>
+        <span class="skill-tag">JavaScript ES6+</span>
+        <span class="skill-tag">Java</span>
+        <span class="skill-tag">SQL</span>
+        <span class="skill-tag">C++</span>
+        <span class="skill-tag">MongoDB</span>
+        <span class="skill-tag">PostgreSQL</span>
+        <span class="skill-tag">REST APIs</span>
+        <span class="skill-tag">OOP · DSA</span>
+        <span class="skill-tag">AI/ML</span>
+        <span class="skill-tag">AWS</span>
+        <span class="skill-tag">Git · GitHub</span>
+        <span class="skill-tag">WebSockets</span>
+        <span class="skill-tag">Networking</span>
+        <span class="skill-tag">JWT</span>
+      </div>
+    </div>
+
+    <!-- CARD 5: PROJECTS -->
+    <div class="card card-projects card-pad reveal" style="transition-delay:0.25s">
+      <div class="label"><span class="label-dot"></span> Projects</div>
+      <div class="projects-list">
+        <div class="project-item">
+          <div>
+            <div class="project-name">Space Sandbox PK</div>
+            <div class="project-desc">Interactive physics simulation platform with an AI tutor layer that interprets simulation behavior using agent-based concepts.</div>
+          </div>
+          <div class="project-stack">
+            <span class="stack-tag">Python</span><span class="stack-tag">Web</span><span class="stack-tag">AI</span>
+          </div>
+        </div>
+        <div class="project-item">
+          <div>
+            <div class="project-name">SoccerSphere</div>
+            <div class="project-desc">Data-intensive management system with normalized SQL Server schema, real-time analytics, and multi-user client–server architecture.</div>
+          </div>
+          <div class="project-stack">
+            <span class="stack-tag">SQL Server</span><span class="stack-tag">Python</span>
+          </div>
+        </div>
+        <div class="project-item">
+          <div>
+            <div class="project-name">OuraRing Clone</div>
+            <div class="project-desc">Health dashboard web app inspired by Oura Ring, built with the MERN stack for metric visualization and responsive UI.</div>
+          </div>
+          <div class="project-stack">
+            <span class="stack-tag">MongoDB</span><span class="stack-tag">Express</span><span class="stack-tag">React</span><span class="stack-tag">Node</span>
+          </div>
+        </div>
+        <div class="project-item">
+          <div>
+            <div class="project-name">NovaRide</div>
+            <div class="project-desc">Ride-sharing application with real-time location API integration and dynamic, distance-based fare computation.</div>
+          </div>
+          <div class="project-stack">
+            <span class="stack-tag">Location API</span><span class="stack-tag">Real-time</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 6: CONTACT -->
+    <div class="card card-contact card-pad reveal" style="transition-delay:0.3s">
+      <div class="label"><span class="label-dot"></span> Reach Me</div>
+      <div class="contact-info">
+        <div class="contact-line">
+          <div class="contact-icon"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></div>
+          ifraadeel82@gmail.com
+        </div>
+        <div class="contact-line">
+          <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 12 19.79 19.79 0 0 1 1.08 3.38 2 2 0 0 1 3.05 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 16z"/></svg></div>
+          +92 323 200 7611
+        </div>
+        <div class="contact-line">
+          <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></div>
+          linkedin.com/in/ifra-adeel
+        </div>
+      </div>
+      <div class="contact-location">📍 Lahore, Pakistan</div>
+    </div>
+
+    <!-- CARD 7: ACHIEVEMENTS -->
+    <div class="card card-pad reveal" style="transition-delay:0.35s">
+      <svg class="botanical-watermark" style="left:-10px;bottom:-10px;width:130px;height:130px;" viewBox="0 0 130 130" fill="none">
+        <path d="M10 120 Q10 60 70 20" stroke="#5C7A62" stroke-width="1" fill="none"/>
+        <ellipse cx="32" cy="88" rx="18" ry="10" fill="#5C7A62" transform="rotate(40 32 88)"/>
+        <ellipse cx="18" cy="62" rx="14" ry="8" fill="#5C7A62" transform="rotate(55 18 62)"/>
+        <ellipse cx="46" cy="55" rx="15" ry="8" fill="#5C7A62" transform="rotate(20 46 55)"/>
+      </svg>
+      <div class="label"><span class="label-dot"></span> Certifications &amp; Achievements</div>
+      <div class="achieve-list">
+        <div class="achieve-item">
+          <div class="achieve-bullet"></div>
+          <div class="achieve-text">CCNA – Introduction to Networking Basics<span>Cisco Networking Academy</span></div>
+        </div>
+        <div class="achieve-item">
+          <div class="achieve-bullet"></div>
+          <div class="achieve-text">Silver Tier – AI Seekho 2026<span>Google-supported countrywide AI initiative</span></div>
+        </div>
+        <div class="achieve-item">
+          <div class="achieve-bullet"></div>
+          <div class="achieve-text">AI/ML Co-Lead – GDG on Campus, CUI Lahore<span>Organized AI hackathons &amp; tech events</span></div>
+        </div>
+        <div class="achieve-item">
+          <div class="achieve-bullet"></div>
+          <div class="achieve-text">Campus Ambassador – FirstPassAI<span>Led on-campus tech sessions &amp; activities</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 8: TOOLS MARQUEE -->
+    <div class="card card-marquee reveal" style="transition-delay:0.4s">
+      <div class="marquee-label label"><span class="label-dot"></span> Daily Tools</div>
+      <div class="marquee-wrap">
+        <!-- ROW 1: scrolls left -->
+        <div class="marquee-track marquee-track-left">
+          <!-- set 1 -->
+          <div class="tool-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>VS Code</div>
+          <div class="tool-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>REST APIs</div>
+          <div class="tool-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>GitHub</div>
+          <div class="tool-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg>MongoDB</div>
+          <div class="tool-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>Python</div>
+          <div class="tool-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>PostgreSQL</div>
+          <div class="tool-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>AWS</div>
+          <div class="tool-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>JavaScript</div>
+          <!-- set 2 (duplicate for seamless loop) -->
+          <div class="tool-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>VS Code</div>
+          <div class="tool-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>REST APIs</div>
+          <div class="tool-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>GitHub</div>
+          <div class="tool-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg>MongoDB</div>
+          <div class="tool-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>Python</div>
+          <div class="tool-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>PostgreSQL</div>
+          <div class="tool-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>AWS</div>
+          <div class="tool-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>JavaScript</div>
+        </div>
+      </div>
+      <div class="marquee-wrap" style="margin-top:10px">
+        <!-- ROW 2: scrolls right -->
+        <div class="marquee-track marquee-track-right">
+          <!-- set 1 -->
+          <div class="tool-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Node.js</div>
+          <div class="tool-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>Wireshark</div>
+          <div class="tool-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>Express.js</div>
+          <div class="tool-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>React.js</div>
+          <div class="tool-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>SQL Server</div>
+          <div class="tool-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Cisco Packet Tracer</div>
+          <div class="tool-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>JWT</div>
+          <div class="tool-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>Git</div>
+          <!-- set 2 -->
+          <div class="tool-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>Node.js</div>
+          <div class="tool-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>Wireshark</div>
+          <div class="tool-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>Express.js</div>
+          <div class="tool-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>React.js</div>
+          <div class="tool-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>SQL Server</div>
+          <div class="tool-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Cisco Packet Tracer</div>
+          <div class="tool-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>JWT</div>
+          <div class="tool-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>Git</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="reveal" style="transition-delay:0.45s">© 2026 Ifra Adeel · Lahore, Pakistan</footer>
+</div>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Trigger header immediately
+  document.querySelector('header').classList.add('visible');
+</script>
+</body>
+</html>
